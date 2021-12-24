@@ -1,0 +1,42 @@
+# ansible playbook
+- hosts: all
+
+  pre_tasks:
+    - name: Add golang repository
+      apt_repository:
+        repo: ppa:longsleep/golang-backports
+      become: true
+    - name: Ensure apt installed
+      apt:
+        name: "{{ item }}"
+        state: present
+      become: true
+      with_items:
+        - unzip
+        - curl
+        - zip
+        - tar
+        - zsh
+        - golang-go
+        - lua5.3
+        - python-pip
+        - python3-pip
+    - name: Change SHELL
+      user: 
+        name: vagrant
+        shell: /usr/bin/zsh
+      become: true
+  roles:
+    - role: yjqpro.dotfiles
+      vars:
+        dotfiles_repo: "https://github.com/yjqpro/dotfiles.git"
+        dotfiles_repo_version: master
+        dotfiles_files:
+          - .zshrc
+          - .p10k.zsh
+          - .tmux.conf
+          # - .config
+  tasks:
+    - name: Run zinit first time 
+      command: /usr/bin/zsh -sic "@zinit-scheduler burst"
+    

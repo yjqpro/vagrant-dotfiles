@@ -1,0 +1,4 @@
+---
+roles:
+  - name: yjqpro.dotfiles
+    src: git+https://github.com/yjqpro/ansible-role-dotfiles.git
